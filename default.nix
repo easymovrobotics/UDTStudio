@@ -1,4 +1,5 @@
-with (import <nixpkgs> { });
+{pkgs ? import <nixpkgs> { }}:
+with pkgs;
 with qt512;
 mkDerivation rec {
   name = "udtstudio";
