@@ -1,4 +1,4 @@
-{pkgs ? import <nixpkgs> { }}:
+{ pkgs ? import <nixpkgs> { } }:
 with pkgs;
 with qt512;
 mkDerivation rec {
@@ -7,12 +7,11 @@ mkDerivation rec {
   qmakeFlags = [ "src" ];
   nativeBuildInputs = [ qmake wrapQtAppsHook ];
   buildInputs = [ qtserialbus qtcharts ];
-  prePatch = ''
-    substituteInPlace src/tools/ubl/main.cpp --replace 'Qt::endl' "endl"
-  '';
   installPhase = ''
+    install -D -t $out/share/eds eds/*
     cd bin
     install -m755 -D -t $out/bin cood udtstudio uds ubl *.sh
     install -D -t $out/lib libudtgui.so* libod.so* libcanopen.so*
+    wrapProgram $out/bin/udtstudio --prefix EDS_PATH : $out/share/eds
   '';
 }
